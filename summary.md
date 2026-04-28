@@ -4,7 +4,7 @@
 
 **Objective:** Fine-tune and compare Whisper models on the MINDS-14 dataset (en-US) for automatic speech recognition (ASR) transcription.
 
-**Key Challenge:** Prevent overfitting on a small dataset (~450 training samples) using:
+**Key Challenge:** Mitigate overfitting on a small dataset (~450 training samples) using:
 - Frozen encoder (only train the decoder)
 - Weight decay + early stopping (patience=3)
 - Both WER and CER metrics for checkpoint selection
@@ -77,21 +77,25 @@
 
 ### Final Test Set Evaluation
 
-| Model | Parameters | WER | CER |
-|-------|-----------|-----|-----|
-| whisper-tiny | ~39M | 0.3501 | 0.2959 |
-| whisper-base | ~74M | **0.2544** | **0.2114** |
+| Model | Parameters | Training | WER | CER |
+|-------|-----------|----------|-----|-----|
+| whisper-tiny | ~39M | zero-shot | 0.5202 | 0.3724 |
+| whisper-tiny | ~39M | fine-tuned | 0.3489 | 0.2953 |
+| whisper-base | ~74M | zero-shot | 0.4887 | 0.3483 |
+| whisper-base | ~74M | fine-tuned | **0.2544** | **0.2111** |
 
-**Improvement (base vs tiny):** WER +27.3%, CER +28.6%
+**Fine-tuning gain:** whisper-tiny improves by 32.9% WER / 20.7% CER over zero-shot; whisper-base improves by 47.9% WER / 39.4% CER over zero-shot.
+
+**Fine-tuned base vs fine-tuned tiny:** WER +27.1% relative improvement.
 
 ### Detailed Metrics
 
 | Model | Exact Match Rate | Avg Sample WER | Overall WER | Overall CER |
 |-------|-----------------|----------------|-------------|-------------|
-| whisper-tiny | 26.32% | 0.2810 | 0.3501 | 0.2959 |
-| whisper-base | **31.58%** | **0.2154** | **0.2544** | **0.2114** |
+| whisper-tiny | 26.32% | 0.2805 | 0.3489 | 0.2953 |
+| whisper-base | **33.33%** | **0.2154** | **0.2544** | **0.2111** |
 
-whisper-base also leads in exact match rate (+5.26pp) and avg sample WER (-0.065).
+whisper-base also leads in exact match rate (+7.01pp) and avg sample WER (-0.065).
 
 ### Error Analysis
 
@@ -111,12 +115,13 @@ whisper-base also leads in exact match rate (+5.26pp) and avg sample WER (-0.065
 
 ## Key Findings
 
-1. **Anti-overfitting strategy worked:** Frozen encoder + weight decay + early stopping prevented severe overfitting (training loss 0.84→0.13 with val loss rising after epoch 4)
-2. **whisper-base outperforms whisper-tiny by ~27% on WER and ~29% on CER** with nearly 2x parameters
-3. **Dataset limitations:**
+1. **Anti-overfitting strategy helped:** Frozen encoder + weight decay + early stopping mitigated overfitting on the small dataset. Training loss continued to decrease while validation loss began rising after the best epoch, suggesting early stopping was useful for checkpoint selection.
+2. **Fine-tuning clearly improves over zero-shot Whisper:** whisper-tiny improves by 32.9% WER, while whisper-base improves by 47.9% WER on the same held-out test split.
+3. **whisper-base is the strongest model:** fine-tuned whisper-base reaches 0.2544 WER / 0.2111 CER and outperforms fine-tuned whisper-tiny by 27.1% relative WER.
+4. **Dataset limitations:**
    - MINDS-14 audio is 8 kHz → half Mel bins empty after upsampling to 16 kHz
    - Only 450 training samples limits learning capacity
-   - Lowercased labels may hurt performance (Whisper pretrained on cased text)
+   - Lowercased labels and evaluation predictions improve metric consistency, but may not match Whisper's cased pretraining distribution
 
 ---
 
