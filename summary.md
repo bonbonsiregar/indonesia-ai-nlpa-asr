@@ -23,7 +23,7 @@
 - **Audio Duration:** Mean ~8.5s, range 1.7s–58.5s
 - **Transcript Length:** 1–50+ words, 4–200+ characters
 - **Visualizations:** Duration histogram, word/character count distributions, spectrograms, MFCCs
-- **Top Tokens:** "i", "to", "my", "a", "account", "i'm", "and", "the"
+- **Top Tokens:** "i", "to", "my", "a", "account", "I'm", "and", "the"
 
 ### 3. Preprocessing
 - **Audio:** Resampled from 8 kHz → 16 kHz using librosa
@@ -32,10 +32,10 @@
 - **Verification:** No overlap between splits (assertions passed)
 
 ### 4. Model Configuration
-| Model | Parameters | Frozen Encoder | Trainable Params |
-|-------|------------|----------------|------------------|
-| whisper-tiny | ~39M | 8,208,384 | ~29.5M |
-| whisper-base | ~74M | 20,590,592 | ~52M |
+| Model        | Parameters | Frozen Encoder | Trainable Params |
+|--------------|------------|----------------|------------------|
+| whisper-tiny | ~39M       | 8,208,384      | ~29.5M           |
+| whisper-base | ~74M       | 20,590,592     | ~52M             |
 
 **Training Settings:**
 - Learning rate: 1e-5
@@ -51,38 +51,38 @@
 ## Results
 
 ### Whisper-tiny Training Progress
-| Epoch | Train Loss | Val Loss | WER | CER |
-|-------|-----------|----------|-----|-----|
-| 1 | 0.836 | 0.546 | 0.267 | 0.204 |
-| 2 | 0.434 | 0.479 | 0.269 | 0.208 |
-| 3 | 0.325 | 0.474 | 0.263 | 0.211 |
-| 4 | 0.261 | 0.475 | **0.254** | 0.202 |
-| 5 | 0.209 | 0.483 | 0.266 | 0.208 |
-| 6 | 0.187 | 0.493 | 0.267 | 0.213 |
-| 7 | 0.135 | 0.505 | 0.283 | 0.232 |
+| Epoch | Train Loss | Val Loss | WER       | CER   |
+|-------|------------|----------|-----------|-------|
+| 1     | 0.836      | 0.546    | 0.267     | 0.204 |
+| 2     | 0.434      | 0.479    | 0.269     | 0.208 |
+| 3     | 0.325      | 0.474    | 0.263     | 0.211 |
+| 4     | 0.261      | 0.475    | **0.254** | 0.202 |
+| 5     | 0.209      | 0.483    | 0.266     | 0.208 |
+| 6     | 0.187      | 0.493    | 0.267     | 0.213 |
+| 7     | 0.135      | 0.505    | 0.283     | 0.232 |
 
 **Best checkpoint:** Epoch 4
 
 ### Whisper-base Training Progress
-| Epoch | Train Loss | Val Loss | WER | CER |
-|-------|-----------|----------|-----|-----|
-| 1 | 0.738 | 0.463 | 0.276 | 0.225 |
-| 2 | 0.374 | 0.425 | 0.240 | 0.185 |
-| 3 | 0.269 | 0.433 | **0.194** | 0.147 |
-| 4 | 0.197 | 0.444 | 0.221 | 0.172 |
-| 5 | 0.140 | 0.475 | 0.269 | 0.221 |
-| 6 | 0.099 | 0.499 | 0.227 | 0.172 |
+| Epoch | Train Loss | Val Loss | WER       | CER   |
+|-------|------------|----------|-----------|-------|
+| 1     | 0.738      | 0.463    | 0.276     | 0.225 |
+| 2     | 0.374      | 0.425    | 0.240     | 0.185 |
+| 3     | 0.269      | 0.433    | **0.194** | 0.147 |
+| 4     | 0.197      | 0.444    | 0.221     | 0.172 |
+| 5     | 0.140      | 0.475    | 0.269     | 0.221 |
+| 6     | 0.099      | 0.499    | 0.227     | 0.172 |
 
 **Best checkpoint:** Epoch 3
 
 ### Final Test Set Evaluation
 
-| Model | Parameters | Training | WER | CER |
-|-------|-----------|----------|-----|-----|
-| whisper-tiny | ~39M | zero-shot | 0.5202 | 0.3724 |
-| whisper-tiny | ~39M | fine-tuned | 0.3489 | 0.2953 |
-| whisper-base | ~74M | zero-shot | 0.4887 | 0.3483 |
-| whisper-base | ~74M | fine-tuned | **0.2544** | **0.2111** |
+| Model        | Parameters | Training   | WER        | CER        |
+|--------------|------------|------------|------------|------------|
+| whisper-tiny | ~39M       | zero-shot  | 0.5202     | 0.3724     |
+| whisper-tiny | ~39M       | fine-tuned | 0.3489     | 0.2953     |
+| whisper-base | ~74M       | zero-shot  | 0.4887     | 0.3483     |
+| whisper-base | ~74M       | fine-tuned | **0.2544** | **0.2111** |
 
 **Fine-tuning gain:** whisper-tiny improves by 32.9% WER / 20.7% CER over zero-shot; whisper-base improves by 47.9% WER / 39.4% CER over zero-shot.
 
@@ -90,10 +90,10 @@
 
 ### Detailed Metrics
 
-| Model | Exact Match Rate | Avg Sample WER | Overall WER | Overall CER |
-|-------|-----------------|----------------|-------------|-------------|
-| whisper-tiny | 26.32% | 0.2805 | 0.3489 | 0.2953 |
-| whisper-base | **33.33%** | **0.2154** | **0.2544** | **0.2111** |
+| Model        | Exact Match Rate | Avg Sample WER | Overall WER | Overall CER |
+|--------------|------------------|----------------|-------------|-------------|
+| whisper-tiny | 26.32%           | 0.2805         | 0.3489      | 0.2953      |
+| whisper-base | **33.33%**       | **0.2154**     | **0.2544**  | **0.2111**  |
 
 whisper-base also leads in exact match rate (+7.01pp) and avg sample WER (-0.065).
 
@@ -101,13 +101,13 @@ whisper-base also leads in exact match rate (+7.01pp) and avg sample WER (-0.065
 
 **Whisper-base Best Predictions (WER = 0.00):**
 - "what's my current balance"
-- "hi hello i just need to deposit money into my account please"
+- "hi hello I just need to deposit money into my account please"
 - "show me my account balance"
 - "card not working"
 - "transfer money to the account"
 
 **Whisper-base Worst Predictions:**
-- Short utterances with misrecognized keywords (e.g., "change my dress" → "can i change my address")
+- Short utterances with misrecognized keywords (e.g., "change my dress" → "can I change my address")
 - Long transcripts with semantic errors (hallucinations)
 - Technical terms not well-represented in training
 
